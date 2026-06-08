@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+logs/
+motion_data/
+outputs/
+wandb/
+runs/
+
+*.egg-info/
+build/
+dist/
+
+.vscode/
+.idea/
