@@ -16,10 +16,10 @@
 
 ```bash
 # 方式一: SSH
-git clone git@github.com:Open-X-Humanoid/xMIGCS.git
+git clone git@github.com:Open-X-Humanoid/xMimic.git
 
 # 方式二: HTTPS
-git clone https://github.com/Open-X-Humanoid/xMIGCS.git
+git clone https://github.com/Open-X-Humanoid/xMimic.git
 ```
 
 - 安装项目依赖:
