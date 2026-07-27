@@ -129,8 +129,9 @@ python scripts/simulator_view_asyn.py -m evt2(机器人名称)
 部署代码 xMIGCS 地址:
 
 ```bash
-git clone https://github.com/Open-X-Humanoid/xMIGCS.git
+git clone https://github.com/Open-X-Humanoid/Deploy_Tienkung.git
 ```
+切换到3.0分支
 
 将导出的 `.onnx` 文件放在 `policy/beyond_mimic/model` 中，同时在 `policy/beyond_mimic/config/BeyondMimic_down.yaml` 中配置对应的 `onnx_path`、`kp` 和 `kd`。
 
