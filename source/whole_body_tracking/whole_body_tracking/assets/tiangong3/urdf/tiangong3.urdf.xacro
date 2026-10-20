@@ -742,7 +742,7 @@
     <parent link="elbow_pitch_l_link" />
     <child link="elbow_yaw_l_link" />
     <axis xyz="0 0 1" />
-    <limit lower="-2.9670597283903604" upper="2.9670597283903604" effort="25.0" velocity="12.217653829810706" />
+    <limit lower="-2.9670597283903604" upper="2.9670597283903604" effort="40.0" velocity="12.217653829810706" />
   </joint>
   <link name="wrist_pitch_l_link">
     <inertial>
@@ -771,7 +771,7 @@
     <parent link="elbow_yaw_l_link" />
     <child link="wrist_pitch_l_link" />
     <axis xyz="0 1 0" />
-    <limit lower="-1.3962634015954636" upper="1.3962634015954636" effort="25.0" velocity="12.217653829810706" />
+    <limit lower="-1.3962634015954636" upper="1.3962634015954636" effort="40.0" velocity="12.217653829810706" />
   </joint>
   <link name="wrist_roll_l_link">
     <inertial>
@@ -800,7 +800,7 @@
     <parent link="wrist_pitch_l_link" />
     <child link="wrist_roll_l_link" />
     <axis xyz="1 0 0" />
-    <limit lower="-1.3962634015954636" upper="1.3962634015954636" effort="25.0" velocity="12.217653829810706" />
+    <limit lower="-1.3962634015954636" upper="1.3962634015954636" effort="40.0" velocity="12.217653829810706" />
   </joint>
   <link name="left_tcp_link">
     <inertial>
@@ -973,7 +973,7 @@
     <parent link="elbow_pitch_r_link" />
     <child link="elbow_yaw_r_link" />
     <axis xyz="0 0 1" />
-    <limit lower="-2.9670597283903604" upper="2.9670597283903604" effort="25.0" velocity="12.217653829810706" />
+    <limit lower="-2.9670597283903604" upper="2.9670597283903604" effort="40.0" velocity="12.217653829810706" />
   </joint>
   <link name="wrist_pitch_r_link">
     <inertial>
@@ -1002,7 +1002,7 @@
     <parent link="elbow_yaw_r_link" />
     <child link="wrist_pitch_r_link" />
     <axis xyz="0 1 0" />
-    <limit lower="-1.3962634015954636" upper="1.3962634015954636" effort="25.0" velocity="12.217653829810706" />
+    <limit lower="-1.3962634015954636" upper="1.3962634015954636" effort="40.0" velocity="12.217653829810706" />
   </joint>
   <link name="wrist_roll_r_link">
     <inertial>
@@ -1031,7 +1031,7 @@
     <parent link="wrist_pitch_r_link" />
     <child link="wrist_roll_r_link" />
     <axis xyz="1 0 0" />
-    <limit lower="-1.3962634015954636" upper="1.3962634015954636" effort="25.0" velocity="12.217653829810706" />
+    <limit lower="-1.3962634015954636" upper="1.3962634015954636" effort="40.0" velocity="12.217653829810706" />
   </joint>
   <link name="right_tcp_link">
     <inertial>

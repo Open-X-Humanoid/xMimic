@@ -5,7 +5,7 @@ from whole_body_tracking.assets import ASSET_DIR
 from whole_body_tracking.robots.actuator import DelayedImplicitActuatorCfg
 
 
-TIANGONG3_CFG = ArticulationCfg(
+TIANGONG3_23DOF_CFG = ArticulationCfg(
     spawn=sim_utils.UrdfFileCfg(
         fix_base=False,
         replace_cylinders_with_capsules=True,
@@ -217,8 +217,8 @@ TIANGONG3_CFG = ArticulationCfg(
 
 
 
-D3_ACTION_SCALE = {}
-for a in TIANGONG3_CFG.actuators.values():
+TIANGONG3_23DOF_ACTION_SCALE = {}
+for a in TIANGONG3_23DOF_CFG.actuators.values():
     e = a.effort_limit_sim
     s = a.stiffness
     names = a.joint_names_expr
@@ -228,4 +228,26 @@ for a in TIANGONG3_CFG.actuators.values():
         s = {n: s for n in names}
     for n in names:
         if n in e and n in s and s[n]:
-            D3_ACTION_SCALE[n] = 0.25  ## 先不使用beyondmimic的pd策略
+            TIANGONG3_23DOF_ACTION_SCALE[n] = 0.25  ## 先不使用beyondmimic的pd策略
+
+
+# Keep the 23-DoF configuration independent from the unlocked arm variant.
+TIANGONG3_29DOF_CFG = TIANGONG3_23DOF_CFG.copy()
+TIANGONG3_29DOF_CFG.spawn.asset_path = f"{ASSET_DIR}/tiangong3/urdf/tiangong3_29.urdf"
+TIANGONG3_29DOF_CFG.init_state.joint_pos.update(
+    {f"{joint}_{side}_joint": 0.0 for side in ("l", "r") for joint in ("elbow_yaw", "wrist_pitch", "wrist_roll")}
+)
+TIANGONG3_29DOF_CFG.actuators["wrists"] = DelayedImplicitActuatorCfg(
+    min_delay=0,
+    max_delay=4,
+    joint_names_expr=[".*elbow_yaw.*joint", ".*wrist_pitch.*joint", ".*wrist_roll.*joint"],
+    # Match the limits in tiangong3_29.urdf.
+    effort_limit_sim=40.0,
+    velocity_limit_sim=12.217653829810706,
+    stiffness={".*elbow_yaw.*joint": 50.0, ".*wrist_pitch.*joint": 20.0, ".*wrist_roll.*joint": 20.0},
+    damping={".*elbow_yaw.*joint": 5.0, ".*wrist_pitch.*joint": 2.0, ".*wrist_roll.*joint": 2.0},
+)
+TIANGONG3_29DOF_ACTION_SCALE = {
+    **TIANGONG3_23DOF_ACTION_SCALE,
+    **{name: 0.25 for name in TIANGONG3_29DOF_CFG.actuators["wrists"].joint_names_expr},
+}

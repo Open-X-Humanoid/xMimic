@@ -80,16 +80,19 @@ python scripts/bvh_to_robot.py --bvh_file data/lafan/dance1_subject3.bvh --robot
 python scripts/gmr_to_npz_inter.py \
 --input_file " " \
 --input_fps {fps} --frame_range 10 -1 --output_name {motion_name} --output_fps 100 \
---robot tiangong3 \
+--robot tiangong3_23dof \
 --start_frames 100 --end_frames 50 --hold_pos 300
 ```
+
+23 自由度使用 `--robot tiangong3_23dof`；29 自由度使用 `--robot tiangong3_29dof`。
+29 自由度版本额外启用双侧 `elbow_yaw`、`wrist_pitch`、`wrist_roll`，输入动作需包含这六个关节（支持 29 关节或含头部的 31 关节输入）。
 
 ### 策略训练
 
 - 指定运动文件训练 policy:
 
 ```bash
-python scripts/rsl_rl/train.py --task=Tracking-Tiangong3-v0 \
+python scripts/rsl_rl/train.py --task=Tracking-Tiangong3-23DoF-v0 \
 --num_envs 4096 \
 --max_iterations 100000 \
 --device cuda:0 \
@@ -97,16 +100,23 @@ python scripts/rsl_rl/train.py --task=Tracking-Tiangong3-v0 \
 --headless --logger tensorboard 
 ```
 
+23 自由度训练日志保存到 `tiangong3_23dof_flat` 实验目录。
+
+29 自由度任务使用 `--task=Tracking-Tiangong3-29DoF-v0`，并指定通过
+`--robot tiangong3_29dof` 转换得到的 `.npz` 文件。训练日志保存到 `tiangong3_29dof_flat` 实验目录。
+
 ### 策略评估
 
 - 使用以下命令运行训练好的 policy:
 
 ```bash
 python scripts/rsl_rl/play.py \
---task=Tracking-Tiangong3-v0 --num_envs=2 \
+--task=Tracking-Tiangong3-23DoF-v0 --num_envs=2 \
 --load_run={run_folder_regex} --checkpoint={checkpoint_regex} \
 --motion_file motion_data/{motion_name}.npz
 ```
+
+评估 29 自由度策略时，同样使用 `--task=Tracking-Tiangong3-29DoF-v0` 和对应的 29 自由度动作文件。
 
 ### 启动 MuJoCo 仿真
 

@@ -3,11 +3,11 @@ from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlPpoActorCriticCfg, R
 
 
 @configclass
-class Tiangong3FlatPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+class Tiangong3Flat23DoFPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 24
     max_iterations = 100000
     save_interval = 500
-    experiment_name = "tiangong3_flat"
+    experiment_name = "tiangong3_23dof_flat"
     empirical_normalization = True
     clip_action = 100
     policy = RslRlPpoActorCriticCfg(
@@ -30,3 +30,8 @@ class Tiangong3FlatPPORunnerCfg(RslRlOnPolicyRunnerCfg):
         desired_kl=0.01,
         max_grad_norm=1.0,
     )
+
+
+@configclass
+class Tiangong3Flat29DoFPPORunnerCfg(Tiangong3Flat23DoFPPORunnerCfg):
+    experiment_name = "tiangong3_29dof_flat"

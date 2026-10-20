@@ -37,7 +37,7 @@ from isaaclab.utils import configclass
 from isaaclab.utils.assets import ISAAC_NUCLEUS_DIR
 
 from whole_body_tracking.tasks.tracking.mdp import MotionLoader
-from whole_body_tracking.robots.tiangong3 import TIANGONG3_CFG
+from whole_body_tracking.robots.tiangong3 import TIANGONG3_23DOF_CFG
 
 @configclass
 class ReplayMotionsSceneCfg(InteractiveSceneCfg):
@@ -54,7 +54,7 @@ class ReplayMotionsSceneCfg(InteractiveSceneCfg):
     )
 
     # articulation
-    robot: ArticulationCfg = TIANGONG3_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
+    robot: ArticulationCfg = TIANGONG3_23DOF_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
 
 
 def run_simulator(sim: sim_utils.SimulationContext, scene: InteractiveScene):

@@ -52,7 +52,7 @@ JOINT_NAMES_TG = [
     "wrist_roll_r_joint",
 ]
 
-JOINT_NAMES_TIANGONG3 = [
+JOINT_NAMES_TIANGONG3_23DOF = [
     "hip_pitch_l_joint",
     "hip_roll_l_joint",
     "hip_yaw_l_joint",
@@ -80,7 +80,7 @@ JOINT_NAMES_TIANGONG3 = [
 
 ROBOT_JOINTS = {
     "tgdex": JOINT_NAMES_TG,
-    "tiangong3": JOINT_NAMES_TIANGONG3,
+    "tiangong3_23dof": JOINT_NAMES_TIANGONG3_23DOF,
 }
 
 
@@ -554,7 +554,7 @@ def parse_args() -> argparse.Namespace:
         "--robot",
         type=str,
         default="auto",
-        choices=["auto", "tgdex", "tiangong3"],
+        choices=["auto", "tgdex", "tiangong3_23dof"],
         help="Select joint list by robot type.",
     )
     parser.add_argument("--fps", type=float, default=None, help="Override FPS if not stored in file.")

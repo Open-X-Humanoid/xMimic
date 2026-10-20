@@ -9,7 +9,7 @@ Output file (npz) keys match the tracking pipeline:
 
 Example:
     python qpos_to_npz_inter.py --input_file motion_data/omni_retarget/evt_climb_original.npz \\
-        --output_name evt_climb_converted --robot tiangong3 --output_dir motion_data/converted
+        --output_name evt_climb_converted --robot tiangong3_23dof --output_dir motion_data/converted
 """
 
 import argparse
@@ -88,9 +88,9 @@ parser.add_argument(
 parser.add_argument(
     "--robot",
     type=str,
-    default="tiangong3",
-    choices=["tiangong3"],
-    help="Target robot to replay and log. This repository currently ships only the tiangong3 robot config.",
+    default="tiangong3_23dof",
+    choices=["tiangong3_23dof"],
+    help="Target robot to replay and log. This repository currently ships only the tiangong3_23dof robot config.",
 )
 parser.add_argument(
     "--correct_root_pose_coupled",
@@ -117,7 +117,7 @@ from isaaclab.utils.assets import ISAAC_NUCLEUS_DIR
 from isaaclab.utils.math import axis_angle_from_quat, quat_conjugate, quat_mul, quat_slerp
 
 
-from whole_body_tracking.robots.tiangong3 import TIANGONG3_CFG
+from whole_body_tracking.robots.tiangong3 import TIANGONG3_23DOF_CFG
 
 
 ROBOT_CONFIG_TIANGONG = {
@@ -341,7 +341,7 @@ ROBOT_CONFIG_DEX_V3 = {
     "input_joint_order": None,
 }
 
-ROBOT_CONFIG_TIANGONG3 = {
+ROBOT_CONFIG_TIANGONG3_23DOF = {
     "default_pose": [
         0.0,
         0.0,
@@ -416,7 +416,7 @@ ROBOT_CONFIG_TIANGONG3 = {
         # "wrist_pitch_r_joint",
         # "wrist_roll_r_joint",
     ],
-    "isaac_lab_cfg": TIANGONG3_CFG,
+    "isaac_lab_cfg": TIANGONG3_23DOF_CFG,
     "num_dof": 23,
     "height_offset": 0.0,
     "input_joint_order": None,
@@ -426,10 +426,10 @@ ROBOT_CONFIG_TIANGONG3 = {
 ROBOT_CONFIG_TIANGONG["input_joint_order"] = list(ROBOT_CONFIG_TIANGONG["joint_names"])
 ROBOT_CONFIG_G1["input_joint_order"] = list(ROBOT_CONFIG_G1["joint_names"])
 ROBOT_CONFIG_DEX_V3["input_joint_order"] = list(ROBOT_CONFIG_TIANGONG["joint_names"])
-ROBOT_CONFIG_TIANGONG3["input_joint_order"] = list(ROBOT_CONFIG_TIANGONG["joint_names"])
+ROBOT_CONFIG_TIANGONG3_23DOF["input_joint_order"] = list(ROBOT_CONFIG_TIANGONG["joint_names"])
 
 ROBOT_CONFIGS = {
-    "tiangong3": ROBOT_CONFIG_TIANGONG3,
+    "tiangong3_23dof": ROBOT_CONFIG_TIANGONG3_23DOF,
 }
 
 

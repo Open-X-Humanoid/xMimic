@@ -59,7 +59,7 @@ from isaaclab.utils import configclass
 from isaaclab.utils.assets import ISAAC_NUCLEUS_DIR
 from isaaclab.utils.math import axis_angle_from_quat, quat_conjugate, quat_mul, quat_slerp
 
-from whole_body_tracking.robots.tiangong3 import TIANGONG3_CFG
+from whole_body_tracking.robots.tiangong3 import TIANGONG3_23DOF_CFG
 
 
 @configclass
@@ -73,7 +73,7 @@ class ReplayMotionsSceneCfg(InteractiveSceneCfg):
             texture_file=f"{ISAAC_NUCLEUS_DIR}/Materials/Textures/Skies/PolyHaven/kloofendal_43d_clear_puresky_4k.hdr",
         ),
     )
-    robot: ArticulationCfg = TIANGONG3_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
+    robot: ArticulationCfg = TIANGONG3_23DOF_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
 
 
 class MotionLoader:

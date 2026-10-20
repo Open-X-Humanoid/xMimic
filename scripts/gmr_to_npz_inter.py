@@ -43,9 +43,9 @@ parser.add_argument("--output_fps", type=int, default=50, help="The fps of the o
 parser.add_argument(
     "--robot",
     type=str,
-    default="tiangong3",
-    choices=["tiangong3"],
-    help="Robot type: tiangong3 (default: tiangong3).",
+    default="tiangong3_23dof",
+    choices=["tiangong3_23dof", "tiangong3_29dof"],
+    help="Robot type: tiangong3_23dof (23 DoF, default) or tiangong3_29dof (29 DoF).",
 )
 parser.add_argument("--knee_modify", action="store_true", help="Apply special knee interpolation for start/end frames.")
 parser.add_argument("--start_frames", type=int, default=0, help="Number of frames to interpolate at start.")
@@ -92,7 +92,7 @@ from isaaclab.utils.math import axis_angle_from_quat, quat_conjugate, quat_mul, 
 ##
 # Pre-defined configs
 ##
-from whole_body_tracking.robots.tiangong3 import TIANGONG3_CFG
+from whole_body_tracking.robots.tiangong3 import TIANGONG3_23DOF_CFG, TIANGONG3_29DOF_CFG
 
 
 
@@ -163,7 +163,7 @@ def correct_root_pose_coupled(root_pos: np.ndarray, root_rot_xyzw: np.ndarray, t
 ##
 # Robot Configuration System
 ##
-# 仅保留 Tiangong3 配置。
+# Tiangong3 configurations (23 and 29 DoF).
 
 TIANGONG3_INPUT_JOINT_ORDER = [
     "hip_pitch_l_joint", "hip_roll_l_joint", "hip_yaw_l_joint",
@@ -191,7 +191,7 @@ TIANGONG3_INPUT_JOINT_ORDER_WITH_HEAD = [
 ]
 
 # Tiangong3机器人配置 (23 DOF)
-ROBOT_CONFIG_TIANGONG3 = {
+ROBOT_CONFIG_TIANGONG3_23DOF = {
     "default_pose": [
         0.0, 0.0, 0.95,  # root position
         1.0, 0.0, 0.0, 0.0,  # root rotation (wxyz)
@@ -231,7 +231,7 @@ ROBOT_CONFIG_TIANGONG3 = {
         "shoulder_yaw_r_joint",
         "elbow_pitch_r_joint",
     ],
-    "isaac_lab_cfg": TIANGONG3_CFG,
+    "isaac_lab_cfg": TIANGONG3_23DOF_CFG,
     "num_dof": 23,
     "height_offset": 0.0,
     "root_target_pos": [0.0, 0.0, 0.95],
@@ -242,15 +242,27 @@ ROBOT_CONFIG_TIANGONG3 = {
     },
 }
 
+ROBOT_CONFIG_TIANGONG3_29DOF = {
+    **ROBOT_CONFIG_TIANGONG3_23DOF,
+    "default_pose": [
+        *ROBOT_CONFIG_TIANGONG3_23DOF["default_pose"][:7],
+        *[TIANGONG3_29DOF_CFG.init_state.joint_pos[name] for name in TIANGONG3_INPUT_JOINT_ORDER],
+    ],
+    "joint_names": TIANGONG3_INPUT_JOINT_ORDER,
+    "isaac_lab_cfg": TIANGONG3_29DOF_CFG,
+    "num_dof": 29,
+}
+
 ROBOT_CONFIGS = {
-    "tiangong3": ROBOT_CONFIG_TIANGONG3,
+    "tiangong3_23dof": ROBOT_CONFIG_TIANGONG3_23DOF,
+    "tiangong3_29dof": ROBOT_CONFIG_TIANGONG3_29DOF,
 }
 
 def get_robot_config(robot_type: str):
     """获取机器人配置
     
     Args:
-        robot_type: 机器人类型,仅支持 "tiangong3"
+        robot_type: 机器人类型,支持 "tiangong3_23dof" 和 "tiangong3_29dof"
         
     Returns:
         包含机器人所有配置的字典
@@ -265,11 +277,11 @@ def get_robot_config(robot_type: str):
         )
     return ROBOT_CONFIGS[robot_type]
 
-def create_scene_cfg(robot_type: str = "tiangong3") -> InteractiveSceneCfg:
+def create_scene_cfg(robot_type: str = "tiangong3_23dof") -> InteractiveSceneCfg:
     """根据机器人类型创建场景配置
     
     Args:
-        robot_type: 机器人类型,仅支持 "tiangong3"
+        robot_type: 机器人类型,支持 "tiangong3_23dof" 和 "tiangong3_29dof"
         
     Returns:
         场景配置对象
@@ -306,7 +318,7 @@ class MotionLoader:
         output_fps: int,
         device: torch.device,
         frame_range: tuple[int, int] | None,
-        robot_type: str = "tiangong3",
+        robot_type: str = "tiangong3_23dof",
         knee_modify: bool = False,
         start_frames: int = 0,
         end_frames: int = -1,
@@ -327,7 +339,7 @@ class MotionLoader:
             output_fps: Desired output frame rate
             device: Torch device (cpu/cuda)
             frame_range: Optional (start, end) frame range to load
-            robot_type: Robot type, only "tiangong3" is supported.
+            robot_type: Robot type, "tiangong3_23dof" or "tiangong3_29dof".
             knee_modify: Apply special knee interpolation for start/end transitions
             start_frames: Number of transition frames to add at start
             end_frames: Number of transition frames to add at end
