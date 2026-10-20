@@ -89,7 +89,7 @@ python scripts/gmr_to_npz_inter.py \
 - 指定运动文件训练 policy:
 
 ```bash
-python scripts/rsl_rl/train.py --task=Tracking-Flat-Tiangong3-Wo-State-Estimation-v0 \
+python scripts/rsl_rl/train.py --task=Tracking-Tiangong3-v0 \
 --num_envs 4096 \
 --max_iterations 100000 \
 --device cuda:0 \
@@ -103,7 +103,7 @@ python scripts/rsl_rl/train.py --task=Tracking-Flat-Tiangong3-Wo-State-Estimatio
 
 ```bash
 python scripts/rsl_rl/play.py \
---task=Tracking-Flat-Tiangong3-Wo-State-Estimation-v0 --num_envs=2 \
+--task=Tracking-Tiangong3-v0 --num_envs=2 \
 --load_run={run_folder_regex} --checkpoint={checkpoint_regex} \
 --motion_file motion_data/{motion_name}.npz
 ```

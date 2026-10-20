@@ -1,11 +1,11 @@
 from isaaclab.utils import configclass
 
 from whole_body_tracking.robots.tiangong3 import D3_ACTION_SCALE, TIANGONG3_CFG
-from whole_body_tracking.tasks.tracking.config.tiangong3.agents.rsl_rl_ppo_cfg import LOW_FREQ_SCALE
 from whole_body_tracking.tasks.tracking.tracking_env_cfg import TrackingEnvCfg
 
 
-class Tiangong3FlatEnvConfig(TrackingEnvCfg):
+@configclass
+class Tiangong3FlatWoStateEstimationEnvCfg(TrackingEnvCfg):
     def __post_init__(self):
         super().__post_init__()
 
@@ -49,19 +49,5 @@ class Tiangong3FlatEnvConfig(TrackingEnvCfg):
             # "wrist_pitch_r_link",
             # "wrist_roll_r_link"
         ]
-
-
-@configclass
-class Tiangong3FlatWoStateEstimationEnvCfg(Tiangong3FlatEnvConfig):
-    def __post_init__(self):
-        super().__post_init__()
         self.observations.policy.motion_anchor_pos_b = None
         self.observations.policy.base_lin_vel = None
-
-
-@configclass
-class Tiangong3FlatLowFreqEnvCfg(Tiangong3FlatEnvConfig):
-    def __post_init__(self):
-        super().__post_init__()
-        self.decimation = round(self.decimation / LOW_FREQ_SCALE)
-        self.rewards.action_rate_l2.weight *= LOW_FREQ_SCALE
