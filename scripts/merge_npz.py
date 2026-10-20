@@ -6,8 +6,8 @@ from pathlib import Path
 from scipy.spatial.transform import Rotation as R
 
 # ===================== 配置 =====================
-input_folder = "motion_data/dex_evt_motion_data/1"
-output_folder = "dex_evt_motion_data/1/merge"
+input_folder = "motion_data/tiangong3_motion_data/1"
+output_folder = "tiangong3_motion_data/1/merge"
 output_file = os.path.join(output_folder, "merge_climb.npz")
 # 通过CLI开启全三轴根姿态对齐（默认只对齐yaw）
 parser = argparse.ArgumentParser(description="Merge motion npz files with optional full root alignment.")

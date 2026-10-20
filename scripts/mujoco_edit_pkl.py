@@ -17,7 +17,7 @@ import numpy as np
 
 DEFAULT_URDF = (
     "source/whole_body_tracking/whole_body_tracking/"
-    "assets/tiangong2dex_urdf/urdf/tiangong2dex.urdf"
+    "assets/tiangong3/urdf/tiangong3.urdf"
 )
 
 JOINT_NAMES_TG = [
@@ -52,7 +52,7 @@ JOINT_NAMES_TG = [
     "wrist_roll_r_joint",
 ]
 
-JOINT_NAMES_DEX_EVT = [
+JOINT_NAMES_TIANGONG3 = [
     "hip_pitch_l_joint",
     "hip_roll_l_joint",
     "hip_yaw_l_joint",
@@ -80,7 +80,7 @@ JOINT_NAMES_DEX_EVT = [
 
 ROBOT_JOINTS = {
     "tgdex": JOINT_NAMES_TG,
-    "dex_evt": JOINT_NAMES_DEX_EVT,
+    "tiangong3": JOINT_NAMES_TIANGONG3,
 }
 
 
@@ -554,7 +554,7 @@ def parse_args() -> argparse.Namespace:
         "--robot",
         type=str,
         default="auto",
-        choices=["auto", "tgdex", "dex_evt"],
+        choices=["auto", "tgdex", "tiangong3"],
         help="Select joint list by robot type.",
     )
     parser.add_argument("--fps", type=float, default=None, help="Override FPS if not stored in file.")

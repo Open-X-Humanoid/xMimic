@@ -67,7 +67,7 @@ git clone https://github.com/Open-X-Humanoid/xGMR.git
 ```
 动作重映射
 ```bash
-python scripts/bvh_to_robot.py --bvh_file data/lafan/dance1_subject3.bvh --robot dex_evt2 --save_path output/YYW.pkl --motion_fps {fps} --add_collision_avoidance True --format "lafan"
+python scripts/bvh_to_robot.py --bvh_file data/lafan/dance1_subject3.bvh --robot tiangong3 --save_path output/YYW.pkl --motion_fps {fps} --add_collision_avoidance True --format "lafan"
 ```
 
 将生成的 `.pkl` 文件复制到 `motion_data/` 文件夹下。
@@ -80,7 +80,7 @@ python scripts/bvh_to_robot.py --bvh_file data/lafan/dance1_subject3.bvh --robot
 python scripts/gmr_to_npz_inter.py \
 --input_file " " \
 --input_fps {fps} --frame_range 10 -1 --output_name {motion_name} --output_fps 100 \
---robot dex_evt \
+--robot tiangong3 \
 --start_frames 100 --end_frames 50 --hold_pos 300
 ```
 
@@ -89,7 +89,7 @@ python scripts/gmr_to_npz_inter.py \
 - 指定运动文件训练 policy:
 
 ```bash
-python scripts/rsl_rl/train.py --task=Tracking-Flat-DexEVT-Wo-State-Estimation-v0 \
+python scripts/rsl_rl/train.py --task=Tracking-Flat-Tiangong3-Wo-State-Estimation-v0 \
 --num_envs 4096 \
 --max_iterations 100000 \
 --device cuda:0 \
@@ -103,7 +103,7 @@ python scripts/rsl_rl/train.py --task=Tracking-Flat-DexEVT-Wo-State-Estimation-v
 
 ```bash
 python scripts/rsl_rl/play.py \
---task=Tracking-Flat-DexEVT-Wo-State-Estimation-v0 --num_envs=2 \
+--task=Tracking-Flat-Tiangong3-Wo-State-Estimation-v0 --num_envs=2 \
 --load_run={run_folder_regex} --checkpoint={checkpoint_regex} \
 --motion_file motion_data/{motion_name}.npz
 ```

@@ -1,16 +1,16 @@
 from isaaclab.utils import configclass
 
-from whole_body_tracking.robots.dex_evt import D3_ACTION_SCALE, DEX_EVT_CFG
-from whole_body_tracking.tasks.tracking.config.dex_evt.agents.rsl_rl_ppo_cfg import LOW_FREQ_SCALE
+from whole_body_tracking.robots.tiangong3 import D3_ACTION_SCALE, TIANGONG3_CFG
+from whole_body_tracking.tasks.tracking.config.tiangong3.agents.rsl_rl_ppo_cfg import LOW_FREQ_SCALE
 from whole_body_tracking.tasks.tracking.tracking_env_cfg import TrackingEnvCfg
 
 
-class DexEVTFlatEnvConfig(TrackingEnvCfg):
+class Tiangong3FlatEnvConfig(TrackingEnvCfg):
     def __post_init__(self):
         super().__post_init__()
 
         # Update the robot configuration
-        self.scene.robot = DEX_EVT_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
+        self.scene.robot = TIANGONG3_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
         self.actions.joint_pos.scale = D3_ACTION_SCALE
 
         # Set the anchor body for motion commands
@@ -52,7 +52,7 @@ class DexEVTFlatEnvConfig(TrackingEnvCfg):
 
 
 @configclass
-class DexEVTFlatWoStateEstimationEnvCfg(DexEVTFlatEnvConfig):
+class Tiangong3FlatWoStateEstimationEnvCfg(Tiangong3FlatEnvConfig):
     def __post_init__(self):
         super().__post_init__()
         self.observations.policy.motion_anchor_pos_b = None
@@ -60,7 +60,7 @@ class DexEVTFlatWoStateEstimationEnvCfg(DexEVTFlatEnvConfig):
 
 
 @configclass
-class DexEVTFlatLowFreqEnvCfg(DexEVTFlatEnvConfig):
+class Tiangong3FlatLowFreqEnvCfg(Tiangong3FlatEnvConfig):
     def __post_init__(self):
         super().__post_init__()
         self.decimation = round(self.decimation / LOW_FREQ_SCALE)

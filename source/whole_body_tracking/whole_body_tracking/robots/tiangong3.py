@@ -5,11 +5,11 @@ from whole_body_tracking.assets import ASSET_DIR
 from whole_body_tracking.robots.actuator import DelayedImplicitActuatorCfg
 
 
-DEX_EVT_CFG = ArticulationCfg(
+TIANGONG3_CFG = ArticulationCfg(
     spawn=sim_utils.UrdfFileCfg(
         fix_base=False,
         replace_cylinders_with_capsules=True,
-        asset_path=f"{ASSET_DIR}/dex_evt/urdf/tiangong2dex.urdf",
+        asset_path=f"{ASSET_DIR}/tiangong3/urdf/tiangong3.urdf",
         activate_contact_sensors=True,
         rigid_props=sim_utils.RigidBodyPropertiesCfg(
             disable_gravity=False,
@@ -218,7 +218,7 @@ DEX_EVT_CFG = ArticulationCfg(
 
 
 D3_ACTION_SCALE = {}
-for a in DEX_EVT_CFG.actuators.values():
+for a in TIANGONG3_CFG.actuators.values():
     e = a.effort_limit_sim
     s = a.stiffness
     names = a.joint_names_expr

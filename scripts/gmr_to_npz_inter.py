@@ -43,9 +43,9 @@ parser.add_argument("--output_fps", type=int, default=50, help="The fps of the o
 parser.add_argument(
     "--robot",
     type=str,
-    default="dex_evt",
-    choices=["dex_evt"],
-    help="Robot type: dex_evt (default: dex_evt).",
+    default="tiangong3",
+    choices=["tiangong3"],
+    help="Robot type: tiangong3 (default: tiangong3).",
 )
 parser.add_argument("--knee_modify", action="store_true", help="Apply special knee interpolation for start/end frames.")
 parser.add_argument("--start_frames", type=int, default=0, help="Number of frames to interpolate at start.")
@@ -92,7 +92,7 @@ from isaaclab.utils.math import axis_angle_from_quat, quat_conjugate, quat_mul, 
 ##
 # Pre-defined configs
 ##
-from whole_body_tracking.robots.dex_evt import DEX_EVT_CFG
+from whole_body_tracking.robots.tiangong3 import TIANGONG3_CFG
 
 
 
@@ -163,9 +163,9 @@ def correct_root_pose_coupled(root_pos: np.ndarray, root_rot_xyzw: np.ndarray, t
 ##
 # Robot Configuration System
 ##
-# 仅保留 Dex EVT 配置。
+# 仅保留 Tiangong3 配置。
 
-DEX_EVT_INPUT_JOINT_ORDER = [
+TIANGONG3_INPUT_JOINT_ORDER = [
     "hip_pitch_l_joint", "hip_roll_l_joint", "hip_yaw_l_joint",
     "knee_pitch_l_joint", "ankle_pitch_l_joint", "ankle_roll_l_joint",
     "hip_pitch_r_joint", "hip_roll_r_joint", "hip_yaw_r_joint",
@@ -177,7 +177,7 @@ DEX_EVT_INPUT_JOINT_ORDER = [
     "elbow_pitch_r_joint", "elbow_yaw_r_joint", "wrist_pitch_r_joint", "wrist_roll_r_joint",
 ]
 
-DEX_EVT_INPUT_JOINT_ORDER_WITH_HEAD = [
+TIANGONG3_INPUT_JOINT_ORDER_WITH_HEAD = [
     "hip_pitch_l_joint", "hip_roll_l_joint", "hip_yaw_l_joint",
     "knee_pitch_l_joint", "ankle_pitch_l_joint", "ankle_roll_l_joint",
     "hip_pitch_r_joint", "hip_roll_r_joint", "hip_yaw_r_joint",
@@ -190,8 +190,8 @@ DEX_EVT_INPUT_JOINT_ORDER_WITH_HEAD = [
     "elbow_pitch_r_joint", "elbow_yaw_r_joint", "wrist_pitch_r_joint", "wrist_roll_r_joint",
 ]
 
-# Dex EVT机器人配置 (23 DOF)
-ROBOT_CONFIG_DEX_EVT = {
+# Tiangong3机器人配置 (23 DOF)
+ROBOT_CONFIG_TIANGONG3 = {
     "default_pose": [
         0.0, 0.0, 0.95,  # root position
         1.0, 0.0, 0.0, 0.0,  # root rotation (wxyz)
@@ -231,26 +231,26 @@ ROBOT_CONFIG_DEX_EVT = {
         "shoulder_yaw_r_joint",
         "elbow_pitch_r_joint",
     ],
-    "isaac_lab_cfg": DEX_EVT_CFG,
+    "isaac_lab_cfg": TIANGONG3_CFG,
     "num_dof": 23,
     "height_offset": 0.0,
     "root_target_pos": [0.0, 0.0, 0.95],
-    "input_joint_order": DEX_EVT_INPUT_JOINT_ORDER,
+    "input_joint_order": TIANGONG3_INPUT_JOINT_ORDER,
     "input_joint_orders": {
-        29: DEX_EVT_INPUT_JOINT_ORDER,
-        31: DEX_EVT_INPUT_JOINT_ORDER_WITH_HEAD,
+        29: TIANGONG3_INPUT_JOINT_ORDER,
+        31: TIANGONG3_INPUT_JOINT_ORDER_WITH_HEAD,
     },
 }
 
 ROBOT_CONFIGS = {
-    "dex_evt": ROBOT_CONFIG_DEX_EVT,
+    "tiangong3": ROBOT_CONFIG_TIANGONG3,
 }
 
 def get_robot_config(robot_type: str):
     """获取机器人配置
     
     Args:
-        robot_type: 机器人类型,仅支持 "dex_evt"
+        robot_type: 机器人类型,仅支持 "tiangong3"
         
     Returns:
         包含机器人所有配置的字典
@@ -265,11 +265,11 @@ def get_robot_config(robot_type: str):
         )
     return ROBOT_CONFIGS[robot_type]
 
-def create_scene_cfg(robot_type: str = "dex_evt") -> InteractiveSceneCfg:
+def create_scene_cfg(robot_type: str = "tiangong3") -> InteractiveSceneCfg:
     """根据机器人类型创建场景配置
     
     Args:
-        robot_type: 机器人类型,仅支持 "dex_evt"
+        robot_type: 机器人类型,仅支持 "tiangong3"
         
     Returns:
         场景配置对象
@@ -292,7 +292,7 @@ def create_scene_cfg(robot_type: str = "dex_evt") -> InteractiveSceneCfg:
             ),
         )
 
-        # articulation - Dex EVT
+        # articulation - Tiangong3
         robot: ArticulationCfg = robot_config["isaac_lab_cfg"].replace(prim_path="{ENV_REGEX_NS}/Robot")
     
     return ReplayMotionsSceneCfg
@@ -306,7 +306,7 @@ class MotionLoader:
         output_fps: int,
         device: torch.device,
         frame_range: tuple[int, int] | None,
-        robot_type: str = "dex_evt",
+        robot_type: str = "tiangong3",
         knee_modify: bool = False,
         start_frames: int = 0,
         end_frames: int = -1,
@@ -327,7 +327,7 @@ class MotionLoader:
             output_fps: Desired output frame rate
             device: Torch device (cpu/cuda)
             frame_range: Optional (start, end) frame range to load
-            robot_type: Robot type, only "dex_evt" is supported.
+            robot_type: Robot type, only "tiangong3" is supported.
             knee_modify: Apply special knee interpolation for start/end transitions
             start_frames: Number of transition frames to add at start
             end_frames: Number of transition frames to add at end

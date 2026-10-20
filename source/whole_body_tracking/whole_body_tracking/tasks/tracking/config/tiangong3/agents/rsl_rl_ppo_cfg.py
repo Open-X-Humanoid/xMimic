@@ -3,11 +3,11 @@ from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlPpoActorCriticCfg, R
 
 
 @configclass
-class DexEVTFlatPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+class Tiangong3FlatPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 24
     max_iterations = 100000
     save_interval = 500
-    experiment_name = "dex_evt_flat"
+    experiment_name = "tiangong3_flat"
     empirical_normalization = True
     clip_action = 100
     policy = RslRlPpoActorCriticCfg(
@@ -36,7 +36,7 @@ LOW_FREQ_SCALE = 0.5
 
 
 @configclass
-class DexEVTFlatLowFreqPPORunnerCfg(DexEVTFlatPPORunnerCfg):
+class Tiangong3FlatLowFreqPPORunnerCfg(Tiangong3FlatPPORunnerCfg):
     def __post_init__(self):
         super().__post_init__()
         self.num_steps_per_env = round(self.num_steps_per_env * LOW_FREQ_SCALE)
