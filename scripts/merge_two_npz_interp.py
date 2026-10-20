@@ -156,6 +156,12 @@ def _infer_seq_len(data: dict[str, Any]) -> tuple[int, str]:
     raise ValueError("无法推断时间序列长度，请确认包含 joint_pos/root_pos/body_pos_w 等键")
 
 
+def _validate_name_layout(first: dict[str, Any], second: dict[str, Any]) -> None:
+    for key in ("body_names", "joint_names"):
+        if (key in first) != (key in second) or (key in first and not np.array_equal(first[key], second[key])):
+            raise ValueError(f"Cannot merge motions with different or missing {key}; regenerate with a consistent layout")
+
+
 # ------------------------- 模式1：完整合并（根对齐 + 全量拼接） ------------------------- #
 def merge_with_transition(
     first: dict[str, Any],
@@ -163,6 +169,7 @@ def merge_with_transition(
     blend_frames: int,
     root_index: int = 0,
 ) -> dict[str, Any]:
+    _validate_name_layout(first, second)
     first_len, first_key = _infer_seq_len(first)
     second_len, second_key = _infer_seq_len(second)
     print(f"[INFO] 第一段时间长度 {first_len} (键: {first_key}), 第二段 {second_len} (键: {second_key})")
@@ -175,6 +182,9 @@ def merge_with_transition(
 
     merged: dict[str, Any] = {}
     for key, arr_a in first.items():
+        if key in ("fps", "body_names", "joint_names"):
+            merged[key] = arr_a
+            continue
         arr_b = second_aligned.get(key)
         if isinstance(arr_a, np.ndarray) and isinstance(arr_b, np.ndarray):
             if arr_a.ndim >= 1 and arr_b.ndim >= 1 and arr_a.shape[0] == first_len and arr_b.shape[0] == second_len:
@@ -198,12 +208,16 @@ def merge_joint_only(
     blend_frames: int,
     joint_key_patterns: tuple[str, ...] = ("joint_pos", "joint_vel", "dof_pos", "dof_vel"),
 ) -> dict[str, Any]:
+    _validate_name_layout(first, second)
     first_len, first_key = _infer_seq_len(first)
     second_len, second_key = _infer_seq_len(second)
     print(f"[INFO] 第一段时间长度 {first_len} (键: {first_key}), 第二段 {second_len} (键: {second_key})")
 
     blended: dict[str, Any] = {}
     for key, arr_b in second.items():
+        if key in ("fps", "body_names", "joint_names"):
+            blended[key] = arr_b
+            continue
         if isinstance(arr_b, np.ndarray) and arr_b.ndim >= 1 and arr_b.shape[0] == second_len:
             is_joint = any(pat in key for pat in joint_key_patterns)
             if is_joint:

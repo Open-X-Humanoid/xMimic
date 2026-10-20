@@ -68,8 +68,10 @@ def run_simulator(sim: sim_utils.SimulationContext, scene: InteractiveScene):
         raise FileNotFoundError(f"Motion file not found: {motion_file}")
     motion = MotionLoader(
         motion_file,
-        torch.tensor([0], dtype=torch.long, device=sim.device),
-        sim.device,
+        ["pelvis"],
+        robot.joint_names,
+        device=sim.device,
+        body_indexes=[0],
     )
     time_steps = torch.zeros(scene.num_envs, dtype=torch.long, device=sim.device)
 

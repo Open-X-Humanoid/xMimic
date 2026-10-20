@@ -374,11 +374,11 @@ class MotionLoader:
         """Loads the motion from the npz/pkl file."""
         _ensure_numpy_core_compatibility()
         data = np.load(self.motion_file, allow_pickle=True)
-        root_pos = torch.from_numpy(data['root_pos']).float().to(self.device)
-        root_rot = torch.from_numpy(data['root_rot']).float().to(self.device)
+        root_pos = torch.from_numpy(np.asarray(data['root_pos'])).float().to(self.device)
+        root_rot = torch.from_numpy(np.asarray(data['root_rot'])).float().to(self.device)
         # convert root_rot from xyzw to wxyz
         root_rot = torch.cat([root_rot[:, 3:4], root_rot[:, :3]], dim=1)
-        dof_pos = torch.from_numpy(data['dof_pos']).float().to(self.device)
+        dof_pos = torch.from_numpy(np.asarray(data['dof_pos'])).float().to(self.device)
         dof_pos = self._match_dof_layout(dof_pos)
         if self.frame_range is not None:
             start_frame, end_frame = self.frame_range
@@ -759,6 +759,8 @@ def run_simulator(sim: sim_utils.SimulationContext, scene: InteractiveScene, rob
     # ------- data logger -------------------------------------------------------
     log = {
         "fps": [args_cli.output_fps],
+        "body_names": np.asarray(robot.body_names, dtype=str),
+        "joint_names": np.asarray(robot.joint_names, dtype=str),
         "joint_pos": [],
         "joint_vel": [],
         "body_pos_w": [],
@@ -837,7 +839,7 @@ def run_simulator(sim: sim_utils.SimulationContext, scene: InteractiveScene, rob
             else:
                 head, tail = {}, {}
                 for k, v in log.items():
-                    if k == "fps":
+                    if k in ("fps", "body_names", "joint_names"):
                         head[k] = v
                         tail[k] = v
                     else:
@@ -846,6 +848,9 @@ def run_simulator(sim: sim_utils.SimulationContext, scene: InteractiveScene, rob
 
                 _save_motion(head, f"_part1_{split_frame}")
                 _save_motion(tail, f"_part2_{split_frame}")
+
+            if args_cli.headless:
+                break
 
 
 def main():

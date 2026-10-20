@@ -85,6 +85,10 @@ for idx, path in enumerate(npz_files):
         prev_end_quat_wxyz = merged["body_quat_w"][-1, 0].copy()
         continue
 
+    for key in ("body_names", "joint_names"):
+        if (key in merged) != (key in cur) or (key in merged and not np.array_equal(merged[key], cur[key])):
+            raise ValueError(f"Cannot merge motions with different or missing {key}; regenerate with a consistent layout")
+
     # ---------- 1. 姿态对齐 ----------
     if ALIGN_YAW_XY_ONLY:
         curr_yaw = get_root_yaw(body_quat_wxyz[0, 0])
@@ -141,6 +145,8 @@ for idx, path in enumerate(npz_files):
 
     # ---------- 6. 拼接 ----------
     for k in merged.keys():
+        if k in ("fps", "body_names", "joint_names"):
+            continue
         if isinstance(merged[k], np.ndarray) and isinstance(cur.get(k), np.ndarray):
             merged[k] = np.concatenate([merged[k], cur[k]], axis=0)
         # 非 ndarray 的直接忽略拼接，保持初始值

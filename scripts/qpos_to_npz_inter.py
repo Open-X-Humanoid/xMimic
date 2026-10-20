@@ -906,6 +906,8 @@ def run_simulator(
 
     log = {
         "fps": [output_fps],
+        "body_names": np.asarray(robot.body_names, dtype=str),
+        "joint_names": np.asarray(robot.joint_names, dtype=str),
         "joint_pos": [],
         "joint_vel": [],
         "body_pos_w": [],

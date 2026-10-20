@@ -78,7 +78,7 @@ def split_npz(
     head, tail = {}, {}
     for key, val in data.items():
         arr = np.asarray(val)
-        if arr.shape and arr.shape[0] == total_frames:
+        if key not in ("fps", "body_names", "joint_names") and arr.shape and arr.shape[0] == total_frames:
             head[key] = arr[:split_frame]
             tail[key] = arr[split_frame:]
         else:

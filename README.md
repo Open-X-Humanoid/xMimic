@@ -15,6 +15,15 @@
 
 - Python 3.11
 - Isaac Sim 5.1
+- Isaac Lab 2.3.2
+
+本地已验证的 conda 环境名为 `lab232`，运行动作转换、训练和评估脚本前先激活环境:
+
+```bash
+conda activate lab232
+```
+
+`lab232` 是本地环境名，自行安装时可以使用其他名称。动作转换、训练和评估应使用一致的 Isaac Lab / Isaac Sim 版本及对应自由度的机器人模型配置。更换环境版本或模型配置后，应重新生成动作 NPZ，避免 body 数量或顺序不一致。
 
 - 将本仓库单独克隆到 Isaac Lab 目录外，例如不要放在 `IsaacLab` 文件夹内部:
 
@@ -83,6 +92,8 @@ python scripts/gmr_to_npz_inter.py \
 --robot tiangong3_23dof \
 --start_frames 100 --end_frames 50 --hold_pos 300
 ```
+
+转换得到的 NPZ 同时保存 `body_names` 和 `joint_names` 字符串数组，其顺序分别对应 body 数据和关节数据的第二维。训练会按这些名称匹配并重排数据，不再要求 NPZ 与训练模型的内部索引顺序相同。旧 NPZ 缺少名称字段时，对应数据会回退到原来的索引加载方式，并在终端打印警告；此时必须保证 NPZ 的 body/关节顺序与训练模型一致。已有名称重复、缺少所需 link/关节或数据维度不匹配时仍会报错。名称匹配不替代模型兼容性检查，转换与训练仍应使用相同的机器人模型配置。
 
 23 自由度使用 `--robot tiangong3_23dof`；29 自由度使用 `--robot tiangong3_29dof`。
 29 自由度版本额外启用双侧 `elbow_yaw`、`wrist_pitch`、`wrist_roll`，输入动作需包含这六个关节（支持 29 关节或含头部的 31 关节输入）。

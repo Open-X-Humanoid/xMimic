@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import numpy as np
-import os
 import torch
 from collections.abc import Sequence
 from dataclasses import MISSING
@@ -23,39 +21,10 @@ from isaaclab.utils.math import (
     yaw_quat,
 )
 
+from whole_body_tracking.utils.motion_loader import MotionLoader
+
 if TYPE_CHECKING:
     from isaaclab.envs import ManagerBasedRLEnv
-
-
-class MotionLoader:
-    def __init__(self, motion_file: str, body_indexes: Sequence[int], device: str = "cpu"):
-        assert os.path.isfile(motion_file), f"Invalid file path: {motion_file}"
-        data = np.load(motion_file)
-        self.fps = data["fps"]
-        self.joint_pos = torch.tensor(data["joint_pos"], dtype=torch.float32, device=device)
-        self.joint_vel = torch.tensor(data["joint_vel"], dtype=torch.float32, device=device)
-        self._body_pos_w = torch.tensor(data["body_pos_w"], dtype=torch.float32, device=device)
-        self._body_quat_w = torch.tensor(data["body_quat_w"], dtype=torch.float32, device=device)
-        self._body_lin_vel_w = torch.tensor(data["body_lin_vel_w"], dtype=torch.float32, device=device)
-        self._body_ang_vel_w = torch.tensor(data["body_ang_vel_w"], dtype=torch.float32, device=device)
-        self._body_indexes = body_indexes
-        self.time_step_total = self.joint_pos.shape[0]
-
-    @property
-    def body_pos_w(self) -> torch.Tensor:
-        return self._body_pos_w[:, self._body_indexes]
-
-    @property
-    def body_quat_w(self) -> torch.Tensor:
-        return self._body_quat_w[:, self._body_indexes]
-
-    @property
-    def body_lin_vel_w(self) -> torch.Tensor:
-        return self._body_lin_vel_w[:, self._body_indexes]
-
-    @property
-    def body_ang_vel_w(self) -> torch.Tensor:
-        return self._body_ang_vel_w[:, self._body_indexes]
 
 
 class MotionCommand(CommandTerm):
@@ -71,7 +40,13 @@ class MotionCommand(CommandTerm):
             self.robot.find_bodies(self.cfg.body_names, preserve_order=True)[0], dtype=torch.long, device=self.device
         )
 
-        self.motion = MotionLoader(self.cfg.motion_file, self.body_indexes, device=self.device)
+        self.motion = MotionLoader(
+            self.cfg.motion_file,
+            self.cfg.body_names,
+            self.robot.joint_names,
+            device=self.device,
+            body_indexes=self.body_indexes.tolist(),
+        )
         self.time_steps = torch.zeros(self.num_envs, dtype=torch.long, device=self.device)
         self.body_pos_relative_w = torch.zeros(self.num_envs, len(cfg.body_names), 3, device=self.device)
         self.body_quat_relative_w = torch.zeros(self.num_envs, len(cfg.body_names), 4, device=self.device)

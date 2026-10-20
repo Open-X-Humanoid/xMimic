@@ -236,6 +236,8 @@ def run_simulator(sim: sim_utils.SimulationContext, scene: InteractiveScene, joi
     # ------- data logger -------------------------------------------------------
     log = {
         "fps": [args_cli.output_fps],
+        "body_names": np.asarray(robot.body_names, dtype=str),
+        "joint_names": np.asarray(robot.joint_names, dtype=str),
         "joint_pos": [],
         "joint_vel": [],
         "body_pos_w": [],
