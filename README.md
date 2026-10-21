@@ -41,14 +41,7 @@ python -m pip install -e source/whole_body_tracking
 
 将处理后的动作数据保存在本地，例如 `motion_data/` 目录下，并在训练脚本中指定对应的动作文件。参考动作需要完成重映射，并且仅使用广义坐标。
 
-- 准备参考动作数据集，请遵守原始数据集的许可证。这里使用与 Unitree 数据集中 `.csv` 文件一致的格式约定。
-
-    - Unitree 重映射后的 LAFAN1 数据集可从 [HuggingFace](https://huggingface.co/datasets/lvhaidong/LAFAN1_Retargeting_Dataset) 下载。
-    - Sidekick 动作来自 [KungfuBot](https://kungfu-bot.github.io/)。
-    - Christiano Ronaldo 庆祝动作来自 [ASAP](https://github.com/LeCAR-Lab/ASAP)。
-    - 平衡动作来自 [HuB](https://hub-robot.github.io/)。
-
-- 通过正向运动学将重映射后的动作转换为包含最大坐标信息的数据，包括 body pose、body velocity 和 body acceleration。脚本会在本地保存 `{motion_name}.npz` 文件，默认输出到 `motion_data/`:
+- 通过正向运动学将重映射后的动作转换为包含最大坐标信息的数据，包括 body pose、body velocity 和 body acceleration。脚本会在本地保存 `{motion_name}.npz` 文件:
 
 ```bash
 python scripts/csv_to_npz.py --input_file {motion_name}.csv --input_fps 30 \
