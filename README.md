@@ -15,7 +15,7 @@
 
 - Python 3.11
 - Isaac Sim 5.1
-- Isaac Lab 2.3.0
+- Isaac Lab 2.3.2
 
 动作转换、训练和评估应使用一致的 Isaac Lab / Isaac Sim 版本及对应自由度的机器人模型配置。更换环境版本或模型配置后，应重新生成动作 NPZ，避免 body 数量或顺序不一致。
 
