@@ -15,15 +15,9 @@
 
 - Python 3.11
 - Isaac Sim 5.1
-- Isaac Lab 2.3.2
+- Isaac Lab 2.3.0
 
-本地已验证的 conda 环境名为 `lab232`，运行动作转换、训练和评估脚本前先激活环境:
-
-```bash
-conda activate lab232
-```
-
-`lab232` 是本地环境名，自行安装时可以使用其他名称。动作转换、训练和评估应使用一致的 Isaac Lab / Isaac Sim 版本及对应自由度的机器人模型配置。更换环境版本或模型配置后，应重新生成动作 NPZ，避免 body 数量或顺序不一致。
+动作转换、训练和评估应使用一致的 Isaac Lab / Isaac Sim 版本及对应自由度的机器人模型配置。更换环境版本或模型配置后，应重新生成动作 NPZ，避免 body 数量或顺序不一致。
 
 - 将本仓库单独克隆到 Isaac Lab 目录外，例如不要放在 `IsaacLab` 文件夹内部:
 
