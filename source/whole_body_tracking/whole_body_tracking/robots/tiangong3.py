@@ -243,7 +243,7 @@ TIANGONG3_29DOF_CFG.actuators["wrists"] = DelayedImplicitActuatorCfg(
     joint_names_expr=[".*elbow_yaw.*joint", ".*wrist_pitch.*joint", ".*wrist_roll.*joint"],
     # Match the limits in tiangong3_29.urdf.
     effort_limit_sim=40.0,
-    velocity_limit_sim=12.217653829810706,
+    velocity_limit_sim=18.325957145940457,
     stiffness={".*elbow_yaw.*joint": 50.0, ".*wrist_pitch.*joint": 20.0, ".*wrist_roll.*joint": 20.0},
     damping={".*elbow_yaw.*joint": 5.0, ".*wrist_pitch.*joint": 2.0, ".*wrist_roll.*joint": 2.0},
 )
